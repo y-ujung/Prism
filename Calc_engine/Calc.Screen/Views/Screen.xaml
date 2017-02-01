@@ -1,0 +1,9 @@
+﻿<UserControl x:Class="Calc.Screen.Views.Screen"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <Grid Background="#FFE6E6E6">
+        <Label x:Name="label" Content="{Binding CalcEngine.Result}" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="25" Margin="0,0,5,0" />
+    </Grid>
+</UserControl>

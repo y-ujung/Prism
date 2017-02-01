@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="ButtonControl.Views.Button"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <Grid>
+        <Grid.Resources>
+            <ControlTemplate x:Key="buttonTemplate1">
+                <Grid>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Ellipse Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" Fill="{TemplateBinding Background}"/>
+                    </StackPanel>
+                </Grid>
+            </ControlTemplate>
+        </Grid.Resources>
+        <StackPanel>
+            <Button Background="{Binding MyModel.Color}" Height ="{Binding MyModel.Bound.Height}" Width="{Binding MyModel.Bound.Width}" Template="{StaticResource buttonTemplate1}" />
+            <Button Height="30" Width="250" Background="Beige">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Grid>
+                            <Ellipse Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" Fill="{TemplateBinding Background}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

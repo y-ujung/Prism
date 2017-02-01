@@ -1,0 +1,10 @@
+﻿<UserControl x:Class="Calc.Selector.Views.Selector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <RadioButton x:Name="calc1" Content="일반 계산기" IsChecked="{Binding Calc1Checked}" />
+        <RadioButton x:Name="calc2" Content="공학용 계산기" Margin="30,0,0,0" IsChecked="{Binding Calc2Checked}" />
+    </StackPanel>
+</UserControl>
