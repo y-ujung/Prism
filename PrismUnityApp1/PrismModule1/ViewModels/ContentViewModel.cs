@@ -10,7 +10,7 @@ namespace PrismModule1.ViewModels
     {
         public ContentViewModel()
         {
-
+            var imageFactory = new Image
         }
     }
 }
