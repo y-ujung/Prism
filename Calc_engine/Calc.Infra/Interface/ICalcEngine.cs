@@ -10,9 +10,6 @@ namespace Calc.Infra.Interface
     {
         string Result { get; set; }
 
-        //bool Calc1Selected { get; set; }
-        //bool Calc2Selected { get; set; }
-
         void InputNumber(object obj);
         void InputBracket(object obj);
         void InputOperation(object obj);

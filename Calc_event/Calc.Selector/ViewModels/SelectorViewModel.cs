@@ -55,7 +55,7 @@ namespace Calc.Selector.ViewModels
                 RM.RequestNavigate("General", "General");
             }
 
-            if(Calc2Checked == true)
+            else if(Calc2Checked == true)
             {
                 NavigationParameters param = new NavigationParameters();
                 param.Add("result", "000");
