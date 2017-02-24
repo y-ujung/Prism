@@ -15,9 +15,6 @@ namespace PrismModule1.ViewModels
 {
     public class ContentViewModel : BindableBase
     {
-        System.Drawing.Point min;
-        System.Drawing.Point max;
-
         private string savePath;
         public string SavePath
         {
@@ -86,7 +83,8 @@ namespace PrismModule1.ViewModels
 
         private void ResizeImage(object obj)
         {
-            var size = new System.Drawing.Size(1000, 1000);
+            var size = new System.Drawing.Size(2000, 2000);
+
             using (Process = new MemoryStream())
             {
                 using (var imageFactory = new ImageFactory(preserveExifData: true))
@@ -101,10 +99,9 @@ namespace PrismModule1.ViewModels
 
         private void CropImage(object obj)
         {
-            CropTransparency();
-            //var crop = new ImageProcessor.Imaging.CropLayer(0, 0, 100, 50, CropMode.Percentage);
-            var crop = new ImageProcessor.Imaging.CropLayer(0, 0, 150, 80, CropMode.Pixels);
-            //var crop = new ImageProcessor.Imaging.CropLayer(min.X, min.Y, max.X, max.Y, CropMode.Pixels);
+            Bitmap img = new Bitmap(LoadPath);
+            var crop = new ImageProcessor.Imaging.CropLayer(MinX(img), MinY(img), MaxX(img) - MinX(img), MaxY(img) - MinY(img), CropMode.Pixels);
+
             using (Process = new MemoryStream())
             {
                 using (var imageFactory = new ImageFactory(preserveExifData: true))
@@ -118,21 +115,68 @@ namespace PrismModule1.ViewModels
 
         }
 
-        private void CropTransparency()
+        public int MinX(Bitmap img)
         {
-            Bitmap img = new Bitmap(LoadPath);
-            max = new System.Drawing.Point(img.Width, img.Height);
-            min = new System.Drawing.Point(0, 0);
-
             for (int x = 0; x < img.Width; x++)
             {
                 for (int y = 0; y < img.Height; y++)
                 {
                     System.Drawing.Color col = img.GetPixel(x, y);
                     if (col.A != 0)
-                        break;
+                    {
+                        return x;
+                    }
                 }
             }
+            return 0;
+        } 
+
+        public int MinY(Bitmap img)
+        {
+            for (int y = 0; y < img.Height; y++)
+            {
+                for (int x = 0; x < img.Width; x++)
+                {
+                    System.Drawing.Color col = img.GetPixel(x, y);
+                    if (col.A != 0)
+                    {
+                        return y;
+                    }
+                }
+            }
+            return 0;
+        }
+
+        public int MaxX(Bitmap img)
+        {
+            for (int x = img.Width; x >= 0; x--)
+            {
+                for (int y = 0; y < img.Height; y++)
+                {
+                    System.Drawing.Color col = img.GetPixel(x-1, y);
+                    if (col.A != 0)
+                    {
+                        return x;
+                    }
+                }
+            }
+            return img.Width;
+        }
+
+        public int MaxY(Bitmap img)
+        {
+            for (int y = img.Height; y >= 0; y--)
+            {
+                for (int x = 0; x < img.Width; x++)
+                {
+                    System.Drawing.Color col = img.GetPixel(x, y-1);
+                    if (col.A != 0)
+                    {
+                        return y;
+                    }
+                }
+            }
+            return img.Height;
         }
     }
 }
