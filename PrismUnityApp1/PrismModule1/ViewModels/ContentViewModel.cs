@@ -84,13 +84,14 @@ namespace PrismModule1.ViewModels
         private void ResizeImage(object obj)
         {
             var size = new System.Drawing.Size(2000, 2000);
+            ResizeLayer resizeLayer = new ResizeLayer(size, ImageProcessor.Imaging.ResizeMode.Stretch, AnchorPosition.Center, true, null, null, null, null);
 
             using (Process = new MemoryStream())
             {
                 using (var imageFactory = new ImageFactory(preserveExifData: true))
                 {
                     imageFactory.Load(Input)
-                        .Resize(size)
+                        .Resize(resizeLayer)
                         .Save(Process);
                 }
                 Output = Process.ToArray();
