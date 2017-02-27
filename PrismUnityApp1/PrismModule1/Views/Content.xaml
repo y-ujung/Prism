@@ -18,14 +18,14 @@
         </Grid.RowDefinitions>
         <TextBox Text="{Binding Engine.LoadPath}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" />
         <Button Content="Load" Command="{Binding LoadImageCommand}" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="1" />
-        <TextBox Text="{Binding SavePath}" Grid.Row="1" Grid.ColumnSpan="3" />
+        <TextBox Text="{Binding Engine.SavePath}" Grid.Row="1" Grid.ColumnSpan="3" />
         <Button Content="Save" Command="{Binding SaveImageCommand}" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="1" />
 
         <Button Content="Resize" Command="{Binding ResizeImageCommand}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"/>
         <Button Content="Crop" Command="{Binding CropImageCommand}" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2"/>
 
-        <Image Source="{Binding Input}" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" />
-        <Image Source="{Binding Output}" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" />
+        <Image Source="{Binding Engine.Input}" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" />
+        <Image Source="{Binding Engine.Output}" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" />
         
       
 
