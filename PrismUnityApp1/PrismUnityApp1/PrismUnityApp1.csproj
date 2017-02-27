@@ -134,6 +134,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PrismInfra\PrismInfra.csproj">
+      <Project>{0a2c26d7-aab9-4d90-a639-dbf0f3c11a8d}</Project>
+      <Name>PrismInfra</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

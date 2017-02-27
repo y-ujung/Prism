@@ -16,7 +16,7 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="8*"/>
         </Grid.RowDefinitions>
-        <TextBox Text="{Binding LoadPath}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" />
+        <TextBox Text="{Binding Engine.LoadPath}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" />
         <Button Content="Load" Command="{Binding LoadImageCommand}" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="1" />
         <TextBox Text="{Binding SavePath}" Grid.Row="1" Grid.ColumnSpan="3" />
         <Button Content="Save" Command="{Binding SaveImageCommand}" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="1" />
