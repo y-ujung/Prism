@@ -22,5 +22,6 @@ namespace PrismUnityApp1
         {
             return new DirectoryModuleCatalog() { ModulePath = @".\Modules" };
         }
+
     }
 }

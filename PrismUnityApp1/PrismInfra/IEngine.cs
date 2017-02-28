@@ -8,6 +8,7 @@ namespace PrismInfra
 {
     public interface IEngine
     {
+
         void LoadImage();
         void SaveImage();
         void ResizeImage();
