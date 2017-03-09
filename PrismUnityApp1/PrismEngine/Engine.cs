@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Drawing.Imaging;
 
 namespace PrismEngine
 {
@@ -27,6 +28,13 @@ namespace PrismEngine
         {
             get { return loadPath; }
             set { SetProperty(ref loadPath, value); }
+        }
+
+        private string tempPath;
+        public string TempPath
+        {
+            get { return tempPath; }
+            set { SetProperty(ref tempPath, value); }
         }
 
         private byte[] input;
@@ -58,6 +66,7 @@ namespace PrismEngine
         public void LoadImage()
         {
             Input = File.ReadAllBytes(LoadPath);
+            TempPath = LoadPath;
             SavePath = "C:\\Users\\NSTL_DH\\Desktop\\123.png";
         }
 
@@ -91,6 +100,7 @@ namespace PrismEngine
         public void CropImage()
         {
             Bitmap img = new Bitmap(LoadPath);
+
             var crop = new ImageProcessor.Imaging.CropLayer(MinX(img), MinY(img), MaxX(img) - MinX(img), MaxY(img) - MinY(img), CropMode.Pixels);
 
             using (Process = new MemoryStream())
@@ -104,6 +114,31 @@ namespace PrismEngine
                 Output = Process.ToArray();
             }
 
+        }
+
+        public void MergeImage()
+        {
+            Bitmap tmp = new Bitmap(1000, 1000);
+            Graphics g = Graphics.FromImage(tmp);
+
+            Image img = Bitmap.FromFile(LoadPath);
+            Image img2 = Bitmap.FromFile(TempPath);
+
+            g.DrawImage(img, 0, 0);
+            g.DrawImage(img2, 250, 250);
+
+            var crop = new ImageProcessor.Imaging.CropLayer(MinX(tmp), MinY(tmp), MaxX(tmp) - MinX(tmp), MaxY(tmp) - MinY(tmp), CropMode.Pixels);
+
+            using (Process = new MemoryStream())
+            {
+                using (var imageFactory = new ImageFactory(preserveExifData: true))
+                {
+                    imageFactory.Load(tmp)
+                        .Crop(crop)
+                        .Save(Process);
+                }
+                Output = Process.ToArray(); ;
+            }
         }
 
         private int MinX(Bitmap img)

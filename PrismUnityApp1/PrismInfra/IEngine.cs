@@ -13,5 +13,6 @@ namespace PrismInfra
         void SaveImage();
         void ResizeImage();
         void CropImage();
+        void MergeImage();
     }
 }
