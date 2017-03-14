@@ -2,41 +2,17 @@
 using ImageProcessor;
 using ImageProcessor.Imaging;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Drawing.Imaging;
+using Microsoft.Win32;
+using System.Windows;
+using System.Drawing.PSD;
 
 namespace PrismEngine
 {
     class Engine : BindableBase, IEngine
     {
-        private string savePath;
-        public string SavePath
-        {
-            get { return savePath; }
-            set { SetProperty(ref savePath, value); }
-        }
-
-        private string loadPath;
-        public string LoadPath
-        {
-            get { return loadPath; }
-            set { SetProperty(ref loadPath, value); }
-        }
-
-        private string tempPath;
-        public string TempPath
-        {
-            get { return tempPath; }
-            set { SetProperty(ref tempPath, value); }
-        }
-
         private byte[] input;
         public byte[] Input
         {
@@ -60,29 +36,35 @@ namespace PrismEngine
 
         public Engine()
         {
-            LoadPath = "C:\\Users\\NSTL_DH\\Desktop\\image1.png";
         }
 
         public void LoadImage()
         {
-            Input = File.ReadAllBytes(LoadPath);
-            TempPath = LoadPath;
-            SavePath = "C:\\Users\\NSTL_DH\\Desktop\\123.png";
+            Input = OpenImage();
         }
 
         public void SaveImage()
         {
             using (var imageFactory = new ImageFactory(preserveExifData: true))
             {
-                imageFactory.Load(Output)
-                    .Save(SavePath);
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                saveFileDialog1.Filter = "JPeg Image|*.jpg|Bitmap Image|*.bmp|Gif Image|*.gif Image|*.png";
+                saveFileDialog1.Title = "Save an Image File";
+                saveFileDialog1.ShowDialog();
+
+                if (saveFileDialog1.FileName != "")
+                {
+                    string savePath = saveFileDialog1.FileName;
+                    imageFactory.Load(Output)
+                    .Save(savePath);
+                }
             }
 
         }
 
         public void ResizeImage()
         {
-            var size = new System.Drawing.Size(2000, 2000);
+            var size = new System.Drawing.Size(1500,1000);
             ResizeLayer resizeLayer = new ResizeLayer(size, ImageProcessor.Imaging.ResizeMode.Stretch, AnchorPosition.Center, true, null, null, null, null);
 
             using (Process = new MemoryStream())
@@ -99,7 +81,7 @@ namespace PrismEngine
 
         public void CropImage()
         {
-            Bitmap img = new Bitmap(LoadPath);
+            Bitmap img = new Bitmap(BytearrToImage(Input));
 
             var crop = new ImageProcessor.Imaging.CropLayer(MinX(img), MinY(img), MaxX(img) - MinX(img), MaxY(img) - MinY(img), CropMode.Pixels);
 
@@ -118,27 +100,90 @@ namespace PrismEngine
 
         public void MergeImage()
         {
-            Bitmap tmp = new Bitmap(1000, 1000);
-            Graphics g = Graphics.FromImage(tmp);
+            Bitmap img = new Bitmap(1000, 1000, PixelFormat.Format32bppArgb);
+            Graphics g = Graphics.FromImage(img);
 
-            Image img = Bitmap.FromFile(LoadPath);
-            Image img2 = Bitmap.FromFile(TempPath);
+            Image source1 = BytearrToImage(Input);
+            Image source2 = BytearrToImage(OpenImage());
+            g.DrawImage(source1, 0, 0);
+            g.DrawImage(source2, 250, 250);
 
-            g.DrawImage(img, 0, 0);
-            g.DrawImage(img2, 250, 250);
+            var crop = new ImageProcessor.Imaging.CropLayer(MinX(img), MinY(img), MaxX(img) - MinX(img), MaxY(img) - MinY(img), CropMode.Pixels);
 
-            var crop = new ImageProcessor.Imaging.CropLayer(MinX(tmp), MinY(tmp), MaxX(tmp) - MinX(tmp), MaxY(tmp) - MinY(tmp), CropMode.Pixels);
+            var size = new System.Drawing.Size(MaxX(img) - MinX(img), MaxY(img) - MinY(img));
+            ResizeLayer resizeLayer = new ResizeLayer(size, ImageProcessor.Imaging.ResizeMode.Stretch, AnchorPosition.Center, true, null, null, null, null);
 
             using (Process = new MemoryStream())
             {
+                img.Save(Process, source1.RawFormat);
+                img = new Bitmap(Process);
+
                 using (var imageFactory = new ImageFactory(preserveExifData: true))
                 {
-                    imageFactory.Load(tmp)
+                    imageFactory.Load(img)
+
                         .Crop(crop)
+                      .Resize(resizeLayer)
                         .Save(Process);
                 }
-                Output = Process.ToArray(); ;
+                Output = Process.ToArray();
             }
+
+            g.Dispose();
+        }
+
+        // byte[] -> image
+        private Image BytearrToImage(byte[] bytearr)
+        {
+            MemoryStream ms = new MemoryStream(bytearr);
+            Image img = Image.FromStream(ms);
+            return img;
+        }
+
+        // image -> byte[]
+        private byte[] ImageToBytearr(System.Drawing.Image img)
+        {
+            MemoryStream ms = new MemoryStream();
+            img.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
+            return ms.ToArray();
+        }
+
+        //이미지 가져오기( + .psd)
+        private byte[] OpenImage()
+        {
+            OpenFileDialog openFile = new OpenFileDialog();
+            openFile.DefaultExt = "jpg";
+            openFile.Filter = "Images Files(*.jpg; *.jpeg; *.gif; *.bmp; *.png)|*.jpg;*.jpeg;*.gif;*.bmp;*.png; *.psd";
+            openFile.ShowDialog();
+            if (openFile.FileNames.Length > 0)
+            {
+                string[] opneFileInfo = openFile.SafeFileName.Split('.');
+
+                foreach (string filename in openFile.FileNames)
+                {
+                    if (opneFileInfo[1] == "psd")
+                    {
+                        var tmp = new PsdFile();
+                        tmp.Load(filename);
+
+                        using (Process = new MemoryStream())
+                        {
+                            using (var imageFactory = new ImageFactory(preserveExifData: true))
+                            {
+                                Bitmap img = ImageDecoder.DecodeImage(tmp);
+                                imageFactory.Load(img)
+                                    .Save(Process);
+                            }
+                            return Process.ToArray();
+                        }
+                    }
+                    else
+                    {
+                        return File.ReadAllBytes(filename);
+                    }
+                }
+            }
+            return null;
         }
 
         private int MinX(Bitmap img)
