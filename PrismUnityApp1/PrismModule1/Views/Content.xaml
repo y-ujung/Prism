@@ -18,7 +18,7 @@
         <Button Content="Load" Command="{Binding LoadImageCommand}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
         <Button Content="Save" Command="{Binding SaveImageCommand}" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2"/>
 
-        <Canvas Grid.Row="1" Grid.Column="0" Background="AntiqueWhite" Grid.ColumnSpan="4">
+        <Canvas Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">
             <Rectangle Canvas.Left="0" Canvas.Top="0" Width="1024" Height="768" Stroke="Black"></Rectangle>
             <Rectangle Canvas.Left="{Binding Engine.Rec.X}" Canvas.Top="{Binding Engine.Rec.Y}" Width="{Binding Engine.Rec.Width}" Height="{Binding Engine.Rec.Height}" Stroke="Blue"></Rectangle>
             <Image Source="{Binding Engine.Input}" Canvas.Left="{Binding Engine.Rec.X}" Canvas.Top="{Binding Engine.Rec.Y}" Width="{Binding Engine.Rec.Width}" Height="{Binding Engine.Rec.Height}" />

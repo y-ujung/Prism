@@ -42,8 +42,8 @@ namespace PrismEngine
         public void LoadImage()
         {
             Input = OpenImage();
-            Image tmp = new Bitmap(BytearrToImage(Input));
-            Rec = new Rectangle(0, 0, tmp.Width, tmp.Height);
+            Bitmap img = new Bitmap(BytearrToImage(Input));
+            Rec = new Rectangle(0, 0, img.Width, img.Height);
         }
 
         public void SaveImage()
