@@ -9,7 +9,6 @@ using Microsoft.Win32;
 using System.Windows;
 using System.Drawing.PSD;
 
-//"
 namespace PrismEngine
 {
     class Engine : BindableBase, IEngine
@@ -35,6 +34,34 @@ namespace PrismEngine
             set { SetProperty(ref rec, value); }
         }
 
+        private int x;
+        public int X
+        {
+            get { return x; }
+            set { SetProperty(ref x, value); }
+        }
+
+        private int y;
+        public int Y
+        {
+            get { return y; }
+            set { SetProperty(ref y, value); }
+        }
+
+        private int w;
+        public int W
+        {
+            get { return w; }
+            set { SetProperty(ref w, value); }
+        }
+
+        private int h;
+        public int H
+        {
+            get { return h; }
+            set { SetProperty(ref h, value); }
+        }
+
         public Engine()
         {
         }
@@ -44,6 +71,11 @@ namespace PrismEngine
             Input = OpenImage();
             Bitmap img = new Bitmap(BytearrToImage(Input));
             Rec = new Rectangle(0, 0, img.Width, img.Height);
+            X = Rec.X;
+            Y = Rec.Y;
+            W = Rec.Width;
+            H = Rec.Height;
+
         }
 
         public void SaveImage()
@@ -65,13 +97,22 @@ namespace PrismEngine
 
         }
 
-        public void ResizeImage()
+        public void ResizeImage(object obj)
         {
+            string str = (obj is string) ? obj as string : string.Empty;
+
+            ImageProcessor.Imaging.ResizeMode mode;
+
+            if (str == "max")
+                mode = ImageProcessor.Imaging.ResizeMode.Max;
+            else
+                mode = ImageProcessor.Imaging.ResizeMode.Stretch;
+
             using (Process = new MemoryStream())
             {
-                var size = new System.Drawing.Size(500, 400);
+                var size = new System.Drawing.Size(W, H);
                 Rec = new Rectangle(Rec.X, Rec.Y, size.Width, size.Height);
-                ResizeLayer resizeLayer = new ResizeLayer(size, ImageProcessor.Imaging.ResizeMode.Stretch, AnchorPosition.Center, true, null, null, null, null);
+                ResizeLayer resizeLayer = new ResizeLayer(size, mode, AnchorPosition.Center, true, null, null, null, null);
 
                 using (var imageFactory = new ImageFactory(preserveExifData: true))
                 {
@@ -80,17 +121,16 @@ namespace PrismEngine
                         .Save(Process);
                 }
 
-                Input = Process.ToArray();
+                SaveProcess();
+
             }
         }
 
         public void CropImage()
         {
-            Bitmap img = new Bitmap(BytearrToImage(Input));
-
             using (Process = new MemoryStream())
             {
-                Rec = SaveRecInfo(img);
+                Rec = new Rectangle(X, Y, W, H);
                 var crop = new ImageProcessor.Imaging.CropLayer(Rec.X, Rec.Y, Rec.Width, Rec.Height, CropMode.Pixels);
 
                 using (var imageFactory = new ImageFactory(preserveExifData: true))
@@ -100,7 +140,28 @@ namespace PrismEngine
                         .Save(Process);
                 }
 
-                Input = Process.ToArray();
+                SaveProcess();
+
+            }
+
+        }
+
+        public void CropTransparentImage()
+        {
+            using (Process = new MemoryStream())
+            {
+                Rec = SaveRecInfo(new Bitmap(BytearrToImage(Input)));
+                var crop = new ImageProcessor.Imaging.CropLayer(Rec.X, Rec.Y, Rec.Width, Rec.Height, CropMode.Pixels);
+
+                using (var imageFactory = new ImageFactory(preserveExifData: true))
+                {
+                    imageFactory.Load(Input)
+                        .Crop(crop)
+                        .Save(Process);
+                }
+
+                SaveProcess();
+
             }
 
         }
@@ -118,6 +179,7 @@ namespace PrismEngine
             g.DrawImage(source1, Rec);
             g.DrawImage(source2, Rec2);
 
+
             using (Process = new MemoryStream())
             {
                 img.Save(Process, System.Drawing.Imaging.ImageFormat.Png);
@@ -133,7 +195,7 @@ namespace PrismEngine
                         .Save(Process);
                 }
 
-                Input = Process.ToArray();
+                SaveProcess();
             }
         }
 
@@ -143,14 +205,6 @@ namespace PrismEngine
             MemoryStream ms = new MemoryStream(bytearr);
             Image img = Image.FromStream(ms);
             return img;
-        }
-
-        // image -> byte[]
-        private byte[] IgeToBytearr(System.Drawing.Image img)
-        {
-            MemoryStream ms = new MemoryStream();
-            img.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
-            return ms.ToArray();
         }
 
         //이미지 가져오기( + .psd)
@@ -189,6 +243,16 @@ namespace PrismEngine
                 }
             }
             return null;
+        }
+
+        private void SaveProcess()
+        {
+            Input = Process.ToArray();
+
+            X = Rec.X;
+            Y = Rec.Y;
+            W = Rec.Width;
+            H = Rec.Height;
         }
 
         private Rectangle SaveRecInfo(Bitmap img)
@@ -230,11 +294,11 @@ namespace PrismEngine
 
         private int MaxX(Bitmap img)
         {
-            for (int x = img.Width; x >= 0; x--)
+            for (int x = img.Width - 1; x >= 0; x--)
             {
                 for (int y = 0; y < img.Height; y++)
                 {
-                    System.Drawing.Color col = img.GetPixel(x - 1, y);
+                    System.Drawing.Color col = img.GetPixel(x, y);
                     if (col.A != 0)
                     {
                         return x;
@@ -246,11 +310,11 @@ namespace PrismEngine
 
         private int MaxY(Bitmap img)
         {
-            for (int y = img.Height; y >= 0; y--)
+            for (int y = img.Height - 1; y >= 0; y--)
             {
                 for (int x = 0; x < img.Width; x++)
                 {
-                    System.Drawing.Color col = img.GetPixel(x, y - 1);
+                    System.Drawing.Color col = img.GetPixel(x, y);
                     if (col.A != 0)
                     {
                         return y;

@@ -18,6 +18,7 @@ namespace PrismModule1.ViewModels
         public ICommand LoadImageCommand { get; set; }
         public ICommand SaveImageCommand { get; set; }
         public ICommand ResizeImageCommand { get; set; }
+        public ICommand CropTransparentImageCommand { get; set;}
         public ICommand CropImageCommand { get; set; }
         public ICommand MergeImageCommand { get; set; }
 
@@ -27,8 +28,9 @@ namespace PrismModule1.ViewModels
 
             LoadImageCommand = new DelegateCommand<object>(s => Engine.LoadImage());
             SaveImageCommand = new DelegateCommand<object>(s => Engine.SaveImage());
-            ResizeImageCommand = new DelegateCommand<object>(s => Engine.ResizeImage());
+            ResizeImageCommand = new DelegateCommand<object>(s => Engine.ResizeImage(s));
             CropImageCommand = new DelegateCommand<object>(s => Engine.CropImage());
+            CropTransparentImageCommand = new DelegateCommand<object>(s => Engine.CropTransparentImage());
             MergeImageCommand = new DelegateCommand<object>(s => Engine.MergeImage());
         }
 

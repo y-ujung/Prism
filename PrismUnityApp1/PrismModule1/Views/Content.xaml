@@ -5,28 +5,42 @@
              prism:ViewModelLocator.AutoWireViewModel="True" >
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1024"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="35"/>
-        </Grid.RowDefinitions>
-        <Button Content="Load" Command="{Binding LoadImageCommand}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
-        <Button Content="Save" Command="{Binding SaveImageCommand}" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2"/>
-
-        <Canvas Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">
-            <Rectangle Canvas.Left="0" Canvas.Top="0" Width="1024" Height="768" Stroke="Black"></Rectangle>
-            <Rectangle Canvas.Left="{Binding Engine.Rec.X}" Canvas.Top="{Binding Engine.Rec.Y}" Width="{Binding Engine.Rec.Width}" Height="{Binding Engine.Rec.Height}" Stroke="Blue"></Rectangle>
+        <Canvas Grid.Row="0" Grid.Column="0">
+            <Rectangle Canvas.Left="{Binding Engine.Rec.X}" Canvas.Top="{Binding Engine.Rec.Y}" Width="{Binding Engine.Rec.Width}" Height="{Binding Engine.Rec.Height}" Stroke="Blue"/>
             <Image Source="{Binding Engine.Input}" Canvas.Left="{Binding Engine.Rec.X}" Canvas.Top="{Binding Engine.Rec.Y}" Width="{Binding Engine.Rec.Width}" Height="{Binding Engine.Rec.Height}" />
         </Canvas>
-
-        <Button Content="Resize" Command="{Binding ResizeImageCommand}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1"/>
-        <Button Content="Crop" Command="{Binding CropImageCommand}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="1"/>
-        <Button Content="Merge" Command="{Binding MergeImageCommand}" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="1"/>
-        <Button Content="-" Command="{Binding CropImageCommand}" Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="1"/>
+        <StackPanel Grid.Row="0" Grid.Column="1">
+            <Button Content="불러오기" Command="{Binding LoadImageCommand}" Margin="0,0,0,2" />
+            <Button Content="불러오기(psd file)" Command="{Binding LoadImageCommand}" Margin="0,0,0,2" />
+            <Button Content="저장하기" Command="{Binding SaveImageCommand}" Margin="0,0,0,20"/>
+            <Grid Margin="0,0,0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Content="X좌표"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Engine.X}" />
+                <Label Grid.Row="0" Grid.Column="2" Content="Y좌표"/>
+                <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding Engine.Y}" />
+                <Label Grid.Row="1" Grid.Column="0" Content="가로"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Engine.W}" />
+                <Label Grid.Row="1" Grid.Column="2" Content="세로"/>
+                <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Engine.H}" />
+            </Grid>
+            <Button Content="사이즈 변경하기(비율유지)" Command="{Binding ResizeImageCommand}" CommandParameter="max" Margin="0,0,0,2"/>
+            <Button Content="사이즈 변경하기" Command="{Binding ResizeImageCommand}" CommandParameter="stretch" Margin="0,0,0,2"/>
+            <Button Content="자르기" Command="{Binding CropImageCommand}" Margin="0,0,0,2"/>
+            <Button Content="투명한 부분 자르기" Command="{Binding CropTransparentImageCommand}" Margin="0,0,0,2"/>
+            <Button Content="합치기" Command="{Binding MergeImageCommand}" Margin="0,0,0,2"/>
+        </StackPanel>
     </Grid>
 </UserControl>
