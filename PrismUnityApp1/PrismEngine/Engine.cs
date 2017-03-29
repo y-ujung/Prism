@@ -130,6 +130,7 @@ namespace PrismEngine
         {
             using (Process = new MemoryStream())
             {
+
                 Rec = new Rectangle(X, Y, W, H);
                 var crop = new ImageProcessor.Imaging.CropLayer(Rec.X, Rec.Y, Rec.Width, Rec.Height, CropMode.Pixels);
 
@@ -248,7 +249,6 @@ namespace PrismEngine
         private void SaveProcess()
         {
             Input = Process.ToArray();
-
             X = Rec.X;
             Y = Rec.Y;
             W = Rec.Width;

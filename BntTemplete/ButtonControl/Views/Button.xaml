@@ -5,16 +5,33 @@
              prism:ViewModelLocator.AutoWireViewModel="True">
     <Grid>
         <Grid.Resources>
-            <ControlTemplate x:Key="buttonTemplate1">
-                <Grid>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Ellipse Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" Fill="{TemplateBinding Background}"/>
-                    </StackPanel>
-                </Grid>
+            <DataTemplate x:Key="Template1" >
+                <StackPanel Background="White">
+                    <Ellipse Height="50" Width="50" Stroke="black"/>
+                    <Ellipse Height="50" Width="50" Stroke="black"/>
+                </StackPanel>
+            </DataTemplate>
+            <ControlTemplate x:Key="Template2">
+                <StackPanel>
+                    <Ellipse Height="50" Width="50" Stroke="Red"/>
+                    <Ellipse Height="50" Width="50" Stroke="black"/>
+                </StackPanel>
             </ControlTemplate>
+            
+            <Style x:Key="TitleStyle" TargetType="{x:Type Control}">
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="FontFamily" Value="Comic Sans MS"/>
+                <Setter Property="FontSize" Value="15"/>
+                <Setter Property="Background" Value="Gray"/>
+            </Style>
+            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource TitleStyle}"/>
+            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource TitleStyle}"/>
+
         </Grid.Resources>
+
         <StackPanel>
-            <Button Background="{Binding MyModel.Color}" Height ="{Binding MyModel.Bound.Height}" Width="{Binding MyModel.Bound.Width}" Template="{StaticResource buttonTemplate1}" />
+            <Button Template="{StaticResource Template2}" ContentTemplate="{StaticResource Template1}" Content="0000000000000000000"/>
+            <Button ContentTemplate="{StaticResource Template1}" Content="0000000000000000000"/>
             <Button Height="30" Width="250" Background="Beige">
                 <Button.Template>
                     <ControlTemplate>
@@ -24,6 +41,9 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
+            <TextBox>textbox</TextBox>
+            <TextBox>textbox</TextBox>
+            <Button>Button</Button>
         </StackPanel>
     </Grid>
 </UserControl>
