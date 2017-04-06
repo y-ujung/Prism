@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="JsonXml.Content.Views.Content"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+        <Button Grid.Row="0" Grid.Column="0" Command="{Binding JsonToXmlCommand}">json -> xml</Button>
+        <Label Grid.Row="1" Grid.Column="0" Content="{Binding Tmp}"></Label>
+
+    </Grid>
+</UserControl>
