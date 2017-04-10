@@ -89,7 +89,9 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnimatedGif.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="ImageInfo.cs" />
     <Compile Include="PrismEngineModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

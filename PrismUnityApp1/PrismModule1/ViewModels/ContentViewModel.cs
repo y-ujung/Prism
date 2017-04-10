@@ -21,6 +21,7 @@ namespace PrismModule1.ViewModels
         public ICommand CropTransparentImageCommand { get; set;}
         public ICommand CropImageCommand { get; set; }
         public ICommand MergeImageCommand { get; set; }
+        public ICommand SplitGifCommand { get; set; }
 
         public ContentViewModel(IEngine engine)
         {
@@ -32,6 +33,7 @@ namespace PrismModule1.ViewModels
             CropImageCommand = new DelegateCommand<object>(s => Engine.CropImage());
             CropTransparentImageCommand = new DelegateCommand<object>(s => Engine.CropTransparentImage());
             MergeImageCommand = new DelegateCommand<object>(s => Engine.MergeImage());
+            SplitGifCommand = new DelegateCommand<object>(s => Engine.SplitGif());
         }
 
     }

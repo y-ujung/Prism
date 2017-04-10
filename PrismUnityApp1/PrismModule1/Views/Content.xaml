@@ -41,6 +41,7 @@
             <Button Content="자르기" Command="{Binding CropImageCommand}" Margin="0,0,0,2"/>
             <Button Content="투명한 부분 자르기" Command="{Binding CropTransparentImageCommand}" Margin="0,0,0,2"/>
             <Button Content="합치기" Command="{Binding MergeImageCommand}" Margin="0,0,0,2"/>
+            <Button Content="GIF 파일 분리하기 " Command="{Binding SplitGifCommand}" Margin="0,0,0,2"/>
         </StackPanel>
     </Grid>
 </UserControl>

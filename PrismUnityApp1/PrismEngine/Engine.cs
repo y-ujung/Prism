@@ -8,6 +8,7 @@ using System.Drawing.Imaging;
 using Microsoft.Win32;
 using System.Windows;
 using System.Drawing.PSD;
+using System;
 
 namespace PrismEngine
 {
@@ -200,6 +201,30 @@ namespace PrismEngine
             }
         }
 
+        public void SplitGif()
+        {
+            OpenFileDialog openFile = new OpenFileDialog();
+            openFile.DefaultExt = "jpg";
+            openFile.Filter = "Images Files(*.gif)|*.gif";
+            openFile.ShowDialog();
+            if (openFile.FileNames.Length > 0)
+            {
+                //foreach (string filename in openFile.FileNames)
+                //{
+                //    AnimatedGif gif = new AnimatedGif(filename);
+                //    ImageInfo info = new ImageInfo(openFile);
+                //    int delay = 0;
+
+                //    for (int i = 0; i < info.frameDelay.Length; i++)
+                //    {
+                //        Input = gif.Images[i];
+                        
+                //    }
+
+                //}
+            }
+        }
+
         // byte[] -> image
         private Image BytearrToImage(byte[] bytearr)
         {
@@ -323,5 +348,7 @@ namespace PrismEngine
             }
             return img.Height;
         }
+
+        
     }
 }

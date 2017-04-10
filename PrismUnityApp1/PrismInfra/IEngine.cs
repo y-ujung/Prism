@@ -15,5 +15,6 @@ namespace PrismInfra
         void CropImage();
         void MergeImage();
         void CropTransparentImage();
+        void SplitGif();
     }
 }
